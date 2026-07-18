@@ -1,0 +1,55 @@
+@import "leaflet/dist/leaflet.css";
+@import "../styles/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(14, 165, 233, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 1));
+    min-height: 100vh;
+  }
+
+  .light body {
+    background-image:
+      radial-gradient(circle at top left, rgba(14, 165, 233, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(241, 245, 249, 1), rgba(226, 232, 240, 1));
+  }
+}
+
+@layer components {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .panel-grid {
+    @apply grid gap-4 md:gap-6;
+  }
+
+  .surface-panel {
+    @apply rounded-xl border border-border/80 bg-card/90 shadow-panel backdrop-blur-sm transition-[border-color,background-color,box-shadow] duration-200;
+  }
+
+  .metric-tile {
+    @apply surface-panel relative min-h-[152px] overflow-hidden p-5;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

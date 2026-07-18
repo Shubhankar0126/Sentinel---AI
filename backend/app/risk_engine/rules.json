@@ -1,0 +1,306 @@
+[
+  {
+    "id": "critical_explosion_hot_work",
+    "name": "Critical explosion risk from gas, workers, and hot work",
+    "description": "Detects the classic compound hazard of high gas concentration, worker presence, and active hot work.",
+    "severity": "critical",
+    "risk_category": "Explosion Risk",
+    "score_delta": 38,
+    "reason": "Gas concentration exceeded the critical threshold while workers were present and hot work was active.",
+    "match": "all",
+    "regulations": [
+      "OSHA hazardous atmosphere controls",
+      "Hot work permit controls"
+    ],
+    "conditions": [
+      {
+        "field": "gas_level",
+        "operator": ">=",
+        "value": 80,
+        "label": "Gas concentration exceeded the critical threshold."
+      },
+      {
+        "field": "worker_present",
+        "operator": "==",
+        "value": true,
+        "label": "Workers are present in the affected zone."
+      },
+      {
+        "field": "permit_type",
+        "operator": "==",
+        "value": "hot_work",
+        "label": "Hot work permit is active."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Evacuate Zone",
+        "priority": "critical",
+        "rationale": "Immediate evacuation reduces the probability of worker exposure during ignition escalation.",
+        "target_type": "zone"
+      },
+      {
+        "action": "Suspend Permit",
+        "priority": "critical",
+        "rationale": "Hot work must stop while the atmosphere remains hazardous.",
+        "target_type": "permit"
+      },
+      {
+        "action": "Increase Ventilation",
+        "priority": "high",
+        "rationale": "Ventilation helps reduce accumulated flammable gas concentration.",
+        "target_type": "zone"
+      }
+    ]
+  },
+  {
+    "id": "confined_space_toxic_exposure",
+    "name": "Confined-space toxic exposure risk",
+    "description": "Flags toxic exposure risk when gas is high during confined-space entry with workers present.",
+    "severity": "critical",
+    "risk_category": "Toxic Exposure",
+    "score_delta": 30,
+    "reason": "Gas concentration is elevated during confined-space work with workers inside the area.",
+    "match": "all",
+    "regulations": [
+      "Confined space atmospheric testing",
+      "OSHA entry permit controls"
+    ],
+    "conditions": [
+      {
+        "field": "gas_level",
+        "operator": ">=",
+        "value": 65,
+        "label": "Gas concentration exceeded the confined-space safe limit."
+      },
+      {
+        "field": "permit_type",
+        "operator": "==",
+        "value": "confined_space",
+        "label": "Confined-space permit is active."
+      },
+      {
+        "field": "worker_present",
+        "operator": "==",
+        "value": true,
+        "label": "Workers are inside the affected zone."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Evacuate Zone",
+        "priority": "critical",
+        "rationale": "Workers should be removed from the confined-space environment immediately.",
+        "target_type": "zone"
+      },
+      {
+        "action": "Notify Safety Officer",
+        "priority": "critical",
+        "rationale": "A safety lead should control confined-space re-entry decisions.",
+        "target_type": "zone"
+      }
+    ]
+  },
+  {
+    "id": "pressure_thermal_runaway",
+    "name": "Pressure and temperature escalation",
+    "description": "Identifies process upset conditions consistent with thermal runaway or rupture escalation.",
+    "severity": "high",
+    "risk_category": "Thermal Runaway",
+    "score_delta": 24,
+    "reason": "Temperature and pressure are jointly elevated beyond the normal safe envelope.",
+    "match": "all",
+    "regulations": [
+      "Process safety management operating limits"
+    ],
+    "conditions": [
+      {
+        "field": "temperature",
+        "operator": ">=",
+        "value": 70,
+        "label": "Temperature exceeded the escalation threshold."
+      },
+      {
+        "field": "pressure",
+        "operator": ">=",
+        "value": 78,
+        "label": "Pressure exceeded the escalation threshold."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Shutdown Equipment",
+        "priority": "high",
+        "rationale": "Controlled shutdown helps arrest thermal and pressure escalation.",
+        "target_type": "equipment"
+      },
+      {
+        "action": "Dispatch Maintenance",
+        "priority": "high",
+        "rationale": "Maintenance should inspect the affected process train before restart.",
+        "target_type": "equipment"
+      }
+    ]
+  },
+  {
+    "id": "maintenance_ignition_cascade",
+    "name": "Maintenance ignition cascade",
+    "description": "Detects elevated ignition and interaction risk during live maintenance with degraded equipment and workers nearby.",
+    "severity": "high",
+    "risk_category": "Ignition Cascade",
+    "score_delta": 20,
+    "reason": "Live maintenance on degraded equipment is raising the chance of an ignition or failure cascade.",
+    "match": "all",
+    "regulations": [
+      "Permit to work isolation verification"
+    ],
+    "conditions": [
+      {
+        "field": "maintenance_running",
+        "operator": "==",
+        "value": true,
+        "label": "Maintenance is currently running."
+      },
+      {
+        "field": "worker_present",
+        "operator": "==",
+        "value": true,
+        "label": "Workers are exposed inside the zone."
+      },
+      {
+        "field": "equipment_health",
+        "operator": "<=",
+        "value": 35,
+        "label": "Equipment health is degraded."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Shutdown Equipment",
+        "priority": "high",
+        "rationale": "Stopping the affected equipment reduces the chance of a maintenance-related cascade.",
+        "target_type": "equipment"
+      },
+      {
+        "action": "Dispatch Maintenance",
+        "priority": "high",
+        "rationale": "Maintenance should review isolation and restore safe operating condition.",
+        "target_type": "equipment"
+      }
+    ]
+  },
+  {
+    "id": "overdue_equipment_failure",
+    "name": "Overdue maintenance failure risk",
+    "description": "Detects latent failure exposure where maintenance is overdue and equipment health is critically low.",
+    "severity": "high",
+    "risk_category": "Equipment Failure",
+    "score_delta": 18,
+    "reason": "Overdue maintenance and poor equipment health are increasing failure probability.",
+    "match": "all",
+    "regulations": [
+      "Mechanical integrity controls"
+    ],
+    "conditions": [
+      {
+        "field": "maintenance_overdue",
+        "operator": "==",
+        "value": true,
+        "label": "Maintenance is overdue."
+      },
+      {
+        "field": "equipment_health",
+        "operator": "<=",
+        "value": 25,
+        "label": "Equipment health is critically low."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Dispatch Maintenance",
+        "priority": "high",
+        "rationale": "Immediate maintenance is needed to prevent equipment failure.",
+        "target_type": "equipment"
+      }
+    ]
+  },
+  {
+    "id": "storm_hazard_exposure",
+    "name": "Weather-driven exposure risk",
+    "description": "Detects rising exposure when adverse weather coincides with active permits and plant activity.",
+    "severity": "moderate",
+    "risk_category": "Weather Exposure",
+    "score_delta": 10,
+    "reason": "Adverse weather is increasing plant exposure while live permit activity is ongoing.",
+    "match": "all",
+    "regulations": [
+      "Adverse weather work suspension controls"
+    ],
+    "conditions": [
+      {
+        "field": "weather_condition",
+        "operator": "in",
+        "value": [
+          "rain",
+          "storm"
+        ],
+        "label": "Weather is adverse."
+      },
+      {
+        "field": "open_permit_count",
+        "operator": ">",
+        "value": 0,
+        "label": "At least one permit is currently active."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Suspend Permit",
+        "priority": "high",
+        "rationale": "Non-essential permit activity should pause during adverse weather.",
+        "target_type": "permit"
+      },
+      {
+        "action": "Notify Safety Officer",
+        "priority": "high",
+        "rationale": "Safety leadership should reassess field activity during the weather event.",
+        "target_type": "zone"
+      }
+    ]
+  },
+  {
+    "id": "incident_recurrence_warning",
+    "name": "Historical recurrence warning",
+    "description": "Raises confidence and urgency when current conditions resemble repeated historical incidents.",
+    "severity": "high",
+    "risk_category": "Incident Recurrence",
+    "score_delta": 15,
+    "reason": "Current conditions resemble multiple historical incidents and a high-similarity benchmark pattern.",
+    "match": "all",
+    "regulations": [
+      "Incident learning and recurrence prevention"
+    ],
+    "conditions": [
+      {
+        "field": "historical_incident_count",
+        "operator": ">=",
+        "value": 3,
+        "label": "There is repeated incident history in this context."
+      },
+      {
+        "field": "historical_similarity",
+        "operator": ">=",
+        "value": 75,
+        "label": "Historical similarity is elevated."
+      }
+    ],
+    "recommendations": [
+      {
+        "action": "Notify Safety Officer",
+        "priority": "high",
+        "rationale": "A recurring pattern requires management-level review and escalation.",
+        "target_type": "zone"
+      }
+    ]
+  }
+]

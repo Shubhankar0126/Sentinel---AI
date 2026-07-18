@@ -1,0 +1,39 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+backend/sentinel_ai.db
+backend/sentinel_ai.db-journal
+*.log
+dist/
+build/
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.*
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# PostgreSQL
+.postgresql/
+backend/.postgresql/
+
+# Database dumps
+*.dump
+
+# Build
+dist/
+build/
+.next/

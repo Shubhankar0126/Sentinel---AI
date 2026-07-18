@@ -1,0 +1,57 @@
+[
+  {
+    "permit_number": "PTW-2026-001",
+    "permit_type": "hot_work",
+    "worker_code": "W-001",
+    "zone_name": "Reactor Zone",
+    "equipment_external_id": "M14860",
+    "start_time": "2026-07-16T09:00:00+00:00",
+    "end_time": "2026-07-16T11:00:00+00:00",
+    "status": "open",
+    "approved_by": "Sentinel Admin"
+  },
+  {
+    "permit_number": "PTW-2026-002",
+    "permit_type": "confined_space",
+    "worker_code": "W-002",
+    "zone_name": "Utility Bay",
+    "equipment_external_id": "L47181",
+    "start_time": "2026-07-16T10:00:00+00:00",
+    "end_time": "2026-07-16T12:00:00+00:00",
+    "status": "open",
+    "approved_by": "Sentinel Admin"
+  },
+  {
+    "permit_number": "PTW-2026-003",
+    "permit_type": "electrical",
+    "worker_code": "W-003",
+    "zone_name": "Control Room",
+    "equipment_external_id": "L47182",
+    "start_time": "2026-07-16T11:00:00+00:00",
+    "end_time": "2026-07-16T13:00:00+00:00",
+    "status": "open",
+    "approved_by": "Sentinel Admin"
+  },
+  {
+    "permit_number": "PTW-2026-004",
+    "permit_type": "working_at_height",
+    "worker_code": "W-004",
+    "zone_name": "Loading Dock",
+    "equipment_external_id": "L47183",
+    "start_time": "2026-07-16T12:00:00+00:00",
+    "end_time": "2026-07-16T14:00:00+00:00",
+    "status": "open",
+    "approved_by": "Sentinel Admin"
+  },
+  {
+    "permit_number": "PTW-2026-005",
+    "permit_type": "cold_work",
+    "worker_code": "W-005",
+    "zone_name": "Utility Bay",
+    "equipment_external_id": "L47184",
+    "start_time": "2026-07-16T13:00:00+00:00",
+    "end_time": "2026-07-16T15:00:00+00:00",
+    "status": "open",
+    "approved_by": "Sentinel Admin"
+  }
+]

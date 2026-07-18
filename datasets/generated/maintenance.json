@@ -1,0 +1,47 @@
+[
+  {
+    "equipment_external_id": "L47181",
+    "maintenance_type": "preventive",
+    "status": "scheduled",
+    "assigned_to": "Maintenance Team A",
+    "scheduled_date": "2026-07-17T06:00:00+00:00",
+    "completed_date": null,
+    "remarks": "Routine lubrication and inspection."
+  },
+  {
+    "equipment_external_id": "L47182",
+    "maintenance_type": "inspection",
+    "status": "scheduled",
+    "assigned_to": "Maintenance Team B",
+    "scheduled_date": "2026-07-18T06:00:00+00:00",
+    "completed_date": null,
+    "remarks": "Valve inspection before hot work."
+  },
+  {
+    "equipment_external_id": "L47183",
+    "maintenance_type": "corrective",
+    "status": "running",
+    "assigned_to": "Maintenance Team C",
+    "scheduled_date": "2026-07-19T06:00:00+00:00",
+    "completed_date": null,
+    "remarks": "Investigate vibration anomaly."
+  },
+  {
+    "equipment_external_id": "L47184",
+    "maintenance_type": "preventive",
+    "status": "scheduled",
+    "assigned_to": "Maintenance Team D",
+    "scheduled_date": "2026-07-20T06:00:00+00:00",
+    "completed_date": null,
+    "remarks": "Cooling line cleanup."
+  },
+  {
+    "equipment_external_id": "M14865",
+    "maintenance_type": "emergency",
+    "status": "overdue",
+    "assigned_to": "Maintenance Team E",
+    "scheduled_date": "2026-07-21T06:00:00+00:00",
+    "completed_date": null,
+    "remarks": "Unplanned compressor inspection pending."
+  }
+]

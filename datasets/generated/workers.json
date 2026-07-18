@@ -1,0 +1,82 @@
+[
+  {
+    "worker_code": "W-001",
+    "name": "Worker 01",
+    "department": "Operations",
+    "designation": "Operator",
+    "phone": "+91-900000001",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-002",
+    "name": "Worker 02",
+    "department": "Safety",
+    "designation": "Safety Officer",
+    "phone": "+91-900000002",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-003",
+    "name": "Worker 03",
+    "department": "Maintenance",
+    "designation": "Technician",
+    "phone": "+91-900000003",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-004",
+    "name": "Worker 04",
+    "department": "Utilities",
+    "designation": "Supervisor",
+    "phone": "+91-900000004",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-005",
+    "name": "Worker 05",
+    "department": "Operations",
+    "designation": "Field Operator",
+    "phone": "+91-900000005",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-006",
+    "name": "Worker 06",
+    "department": "Maintenance",
+    "designation": "Engineer",
+    "phone": "+91-900000006",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-007",
+    "name": "Worker 07",
+    "department": "Safety",
+    "designation": "Inspector",
+    "phone": "+91-900000007",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-008",
+    "name": "Worker 08",
+    "department": "Utilities",
+    "designation": "Control Engineer",
+    "phone": "+91-900000008",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-009",
+    "name": "Worker 09",
+    "department": "Operations",
+    "designation": "Shift Lead",
+    "phone": "+91-900000009",
+    "status": "active"
+  },
+  {
+    "worker_code": "W-010",
+    "name": "Worker 10",
+    "department": "Maintenance",
+    "designation": "Planner",
+    "phone": "+91-900000010",
+    "status": "active"
+  }
+]

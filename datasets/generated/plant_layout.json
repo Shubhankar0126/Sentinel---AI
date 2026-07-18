@@ -1,0 +1,35 @@
+{
+  "plant": {
+    "name": "Sentinel Demo Plant",
+    "location": "Industrial Corridor, Mumbai",
+    "industry": "Chemical",
+    "latitude": 19.076,
+    "longitude": 72.8777
+  },
+  "zones": [
+    {
+      "zone_name": "Control Room",
+      "risk_level": "low",
+      "latitude": 19.0762,
+      "longitude": 72.8779
+    },
+    {
+      "zone_name": "Reactor Zone",
+      "risk_level": "moderate",
+      "latitude": 19.0763,
+      "longitude": 72.8781
+    },
+    {
+      "zone_name": "Utility Bay",
+      "risk_level": "low",
+      "latitude": 19.0764,
+      "longitude": 72.8783
+    },
+    {
+      "zone_name": "Loading Dock",
+      "risk_level": "moderate",
+      "latitude": 19.0765,
+      "longitude": 72.8785
+    }
+  ]
+}

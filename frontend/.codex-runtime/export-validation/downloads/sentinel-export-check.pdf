@@ -1,0 +1,45 @@
+%PDF-1.4
+% Sentinel AI export
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 666 >>
+stream
+BT /F2 20 Tf 1 0 0 1 48.00 793.89 Tm (Sentinel Analytics - Risks) Tj ET
+BT /F2 14 Tf 1 0 0 1 48.00 748.89 Tm (Summary) Tj ET
+BT /F1 10 Tf 1 0 0 1 48.00 727.89 Tm (Time range: 7 days) Tj ET
+BT /F1 10 Tf 1 0 0 1 48.00 712.89 Tm (Records: 2) Tj ET
+BT /F1 10 Tf 1 0 0 1 48.00 697.89 Tm (Drill-down: Risks) Tj ET
+BT /F2 14 Tf 1 0 0 1 48.00 667.89 Tm (Records) Tj ET
+BT /F1 10 Tf 1 0 0 1 48.00 646.89 Tm (Zone A incident | critical | Zone A, "North" processing line | 2026-07-17T10:30:00Z) Tj ET
+BT /F1 10 Tf 1 0 0 1 48.00 631.89 Tm (Permit review | warning | Hot work overlap near compressor bay | 2026-07) Tj ET
+BT /F1 10 Tf 1 0 0 1 48.00 616.89 Tm (-17T11:15:00Z) Tj ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000030 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000204 00000 n 
+0000000277 00000 n 
+0000000419 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1136
+%%EOF
