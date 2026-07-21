@@ -3,7 +3,9 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
+import threading
 from functools import lru_cache
+from typing import Any
 
 import numpy as np
 
@@ -36,6 +38,11 @@ class HashingEmbeddingService:
 
 
 class SentenceTransformerEmbeddingService:
+    _model_cache: dict[str, Any] = {}
+    _dimension_cache: dict[str, int] = {}
+    _failed_models: set[str] = set()
+    _load_lock = threading.Lock()
+
     def __init__(self):
         self.settings = get_settings()
         self.model_name = self.settings.embedding_model_name
@@ -70,20 +77,48 @@ class SentenceTransformerEmbeddingService:
     def _load_model(self) -> None:
         if self._model is not None or self._load_failed:
             return
-        try:
-            from sentence_transformers import SentenceTransformer
+        cached_model = self._model_cache.get(self.model_name)
+        if cached_model is not None:
+            self._model = cached_model
+            self.dimension = self._dimension_cache[self.model_name]
+            return
+        if self.model_name in self._failed_models:
+            self._activate_fallback()
+            return
+        with self._load_lock:
+            cached_model = self._model_cache.get(self.model_name)
+            if cached_model is not None:
+                self._model = cached_model
+                self.dimension = self._dimension_cache[self.model_name]
+                return
+            if self.model_name in self._failed_models:
+                self._activate_fallback()
+                return
+            try:
+                from sentence_transformers import SentenceTransformer
 
-            self._model = SentenceTransformer(self.model_name)
-            self.dimension = int(self._model.get_sentence_embedding_dimension())
-        except Exception as exc:  # noqa: BLE001
-            logger.warning(
-                "SentenceTransformer model '%s' unavailable, using hashing fallback: %s",
-                self.model_name,
-                exc,
-            )
-            self._load_failed = True
-            self.provider_name = self._fallback.provider_name
-            self.model_name = self._fallback.model_name
+                model = SentenceTransformer(self.model_name)
+                self._model_cache[self.model_name] = model
+                self._dimension_cache[self.model_name] = int(
+                    model.get_sentence_embedding_dimension()
+                )
+                self._model = model
+                self.dimension = self._dimension_cache[self.model_name]
+            except Exception as exc:  # noqa: BLE001
+                logger.warning(
+                    "SentenceTransformer model '%s' unavailable, using hashing fallback: %s",
+                    self.model_name,
+                    exc,
+                )
+                self._failed_models.add(self.model_name)
+                self._activate_fallback()
+
+    def _activate_fallback(self) -> None:
+        self._load_failed = True
+        self._model = None
+        self.provider_name = self._fallback.provider_name
+        self.model_name = self._fallback.model_name
+        self.dimension = self._fallback.dimension
 
 
 @lru_cache(maxsize=1)
