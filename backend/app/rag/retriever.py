@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
+import threading
 import time
 from dataclasses import dataclass, field
 from functools import lru_cache
@@ -55,9 +56,17 @@ class ContextRetriever:
             chunk_size=settings.rag_chunk_size,
             overlap=settings.rag_chunk_overlap,
         )
-        self.embedding_service = embedding_service or get_embedding_service()
+        self._embedding_service = embedding_service
         self.vector_store = vector_store or FaissVectorStore(index_dir or settings.rag_index_dir)
         self._last_diagnostics: dict[str, Any] = {}
+        self._index_lock = threading.Lock()
+        self._indexed_manifest_key: tuple[tuple[str, int, int], ...] | None = None
+
+    @property
+    def embedding_service(self) -> SentenceTransformerEmbeddingService:
+        if self._embedding_service is None:
+            self._embedding_service = get_embedding_service()
+        return self._embedding_service
 
     async def retrieve(
         self,
@@ -112,46 +121,66 @@ class ContextRetriever:
         started = time.perf_counter()
         files = self.document_loader.discover_files()
         manifest = self._build_manifest(files)
-        if self.vector_store.exists():
-            try:
-                self.vector_store.load()
-                if self.vector_store.manifest == manifest:
-                    diagnostics = self.vector_store.stats()
-                    diagnostics["documents_loaded"] = len(files)
-                    diagnostics["build_elapsed_seconds"] = 0.0
-                    diagnostics["source_roots"] = [str(path) for path in self.document_roots]
-                    diagnostics["manifest_match"] = True
-                    self._last_diagnostics = diagnostics
-                    return diagnostics
-            except Exception as exc:  # noqa: BLE001
-                logger.warning("Failed to load persisted RAG index, rebuilding: %s", exc)
+        manifest_key = self._manifest_key(manifest)
+        with self._index_lock:
+            if self.vector_store.is_loaded and self._indexed_manifest_key == manifest_key:
+                diagnostics = self._compose_diagnostics(files, build_elapsed_seconds=0.0, manifest_match=True)
+                self._last_diagnostics = diagnostics
+                return diagnostics
+            if self.vector_store.is_loaded and self.vector_store.manifest == manifest:
+                self._indexed_manifest_key = manifest_key
+                diagnostics = self._compose_diagnostics(files, build_elapsed_seconds=0.0, manifest_match=True)
+                self._last_diagnostics = diagnostics
+                return diagnostics
+            if not self.vector_store.is_loaded and self.vector_store.exists():
+                try:
+                    self.vector_store.load()
+                    if self.vector_store.manifest == manifest:
+                        self._indexed_manifest_key = manifest_key
+                        diagnostics = self._compose_diagnostics(
+                            files,
+                            build_elapsed_seconds=0.0,
+                            manifest_match=True,
+                        )
+                        self._last_diagnostics = diagnostics
+                        return diagnostics
+                except Exception as exc:  # noqa: BLE001
+                    logger.warning("Failed to load persisted RAG index, rebuilding: %s", exc)
 
-        records, texts = self._build_records(files)
-        embeddings = self.embedding_service.embed_texts(texts)
-        self.vector_store.create(
-            embeddings=embeddings,
-            records=records,
-            manifest=manifest,
-            embedding_provider=self.embedding_service.provider_name,
-            embedding_model=self.embedding_service.model_name,
-        )
-        diagnostics = self.vector_store.stats()
-        diagnostics["documents_loaded"] = len(files)
-        diagnostics["build_elapsed_seconds"] = round(time.perf_counter() - started, 3)
-        diagnostics["source_roots"] = [str(path) for path in self.document_roots]
-        diagnostics["manifest_match"] = False
-        self._last_diagnostics = diagnostics
-        return diagnostics
+            records, texts = self._build_records(files)
+            embeddings = self.embedding_service.embed_texts(texts)
+            self.vector_store.create(
+                embeddings=embeddings,
+                records=records,
+                manifest=manifest,
+                embedding_provider=self.embedding_service.provider_name,
+                embedding_model=self.embedding_service.model_name,
+            )
+            self._indexed_manifest_key = manifest_key
+            diagnostics = self._compose_diagnostics(
+                files,
+                build_elapsed_seconds=round(time.perf_counter() - started, 3),
+                manifest_match=False,
+            )
+            self._last_diagnostics = diagnostics
+            del embeddings, texts, records
+            return diagnostics
 
     def refresh_index(self) -> dict[str, Any]:
-        if self.vector_store.exists():
+        with self._index_lock:
+            self._indexed_manifest_key = None
+            self._last_diagnostics = {}
             for path in (
                 self.vector_store.index_path,
                 self.vector_store.metadata_path,
+                self.vector_store.content_path,
                 self.vector_store.embeddings_path,
             ):
                 if path.exists():
                     path.unlink()
+            self.vector_store._index = None
+            self.vector_store.records = []
+            self.vector_store.manifest = []
         return self.ensure_index()
 
     def delete_from_index(
@@ -161,41 +190,67 @@ class ContextRetriever:
         metadata_filters: dict[str, str] | None = None,
     ) -> int:
         self.ensure_index()
-        return self.vector_store.delete(chunk_ids=chunk_ids, metadata_filters=metadata_filters)
+        deleted = self.vector_store.delete(chunk_ids=chunk_ids, metadata_filters=metadata_filters)
+        self._last_diagnostics = {}
+        return deleted
 
     def diagnostics(self) -> dict[str, Any]:
         return self.ensure_index() if not self._last_diagnostics else dict(self._last_diagnostics)
 
     def _build_records(self, files: list[Path]) -> tuple[list[VectorRecord], list[str]]:
-        sections = []
+        records: list[VectorRecord] = []
+        texts: list[str] = []
         for path in files:
-            sections.extend(self.document_loader.load_sections(path))
-        chunks: list[DocumentChunk] = self.chunker.chunk_sections(sections)
-        records = [
-            VectorRecord(
-                chunk_id=chunk.chunk_id,
-                document_name=chunk.document_name,
-                section=chunk.section,
-                source=chunk.source,
-                page=chunk.page,
-                content=chunk.content,
-                metadata=dict(chunk.metadata),
-            )
-            for chunk in chunks
-        ]
-        texts = [chunk.content for chunk in chunks]
+            sections = self.document_loader.load_sections(path)
+            if not sections:
+                continue
+            chunks: list[DocumentChunk] = self.chunker.chunk_sections(sections)
+            for chunk in chunks:
+                records.append(
+                    VectorRecord(
+                        chunk_id=chunk.chunk_id,
+                        document_name=chunk.document_name,
+                        section=chunk.section,
+                        source=chunk.source,
+                        page=chunk.page,
+                        content=chunk.content,
+                        metadata=dict(chunk.metadata),
+                    )
+                )
+                texts.append(chunk.content)
         return records, texts
+
+    def _compose_diagnostics(
+        self,
+        files: list[Path],
+        *,
+        build_elapsed_seconds: float,
+        manifest_match: bool,
+    ) -> dict[str, Any]:
+        diagnostics = self.vector_store.stats()
+        diagnostics["documents_loaded"] = len(files)
+        diagnostics["build_elapsed_seconds"] = build_elapsed_seconds
+        diagnostics["source_roots"] = [str(path) for path in self.document_roots]
+        diagnostics["manifest_match"] = manifest_match
+        return diagnostics
 
     @staticmethod
     def _build_manifest(files: list[Path]) -> list[dict[str, Any]]:
-        return [
-            {
-                "source": str(path.resolve()),
-                "size": path.stat().st_size,
-                "modified": int(path.stat().st_mtime),
-            }
-            for path in files
-        ]
+        manifest: list[dict[str, Any]] = []
+        for path in files:
+            stat_result = path.stat()
+            manifest.append(
+                {
+                    "source": str(path.resolve()),
+                    "size": stat_result.st_size,
+                    "modified": int(stat_result.st_mtime),
+                }
+            )
+        return manifest
+
+    @staticmethod
+    def _manifest_key(manifest: list[dict[str, Any]]) -> tuple[tuple[str, int, int], ...]:
+        return tuple((item["source"], int(item["size"]), int(item["modified"])) for item in manifest)
 
     def _rank_hits(
         self,
@@ -211,70 +266,52 @@ class ContextRetriever:
             metadata_filters=metadata_filters,
             candidate_limit=max(top_k * 25, 50),
         )
-        vector_scores = {item["chunk_id"]: float(item["score"]) for item in vector_hits}
+        if not vector_hits:
+            return []
+        query_lower = query.lower()
         query_tokens = self._tokenize(query)
-        lexical_candidates: list[dict[str, Any]] = []
-        for record in self.vector_store.records:
-            if metadata_filters and not self._matches_filters(record, metadata_filters):
-                continue
-            lexical_score = self._lexical_score(query_tokens, query, record)
-            if lexical_score <= 0 and record.chunk_id not in vector_scores:
-                continue
-            lexical_candidates.append(
-                {
-                    "chunk_id": record.chunk_id,
-                    "document_name": record.document_name,
-                    "section": record.section,
-                    "source": record.source,
-                    "page": record.page,
-                    "content": record.content,
-                    "metadata": record.metadata,
-                    "score": lexical_score + vector_scores.get(record.chunk_id, 0.0),
-                }
-            )
-        if not lexical_candidates:
-            return vector_hits[:top_k]
-        lexical_candidates.sort(key=lambda item: item["score"], reverse=True)
-        return lexical_candidates[:top_k]
+        reranked_hits: list[dict[str, Any]] = []
+        for item in vector_hits:
+            lexical_score = self._lexical_score(query_tokens, query_lower, item)
+            reranked_hit = dict(item)
+            reranked_hit["metadata"] = dict(item.get("metadata", {}))
+            reranked_hit["score"] = lexical_score + float(item["score"])
+            reranked_hits.append(reranked_hit)
+        reranked_hits.sort(key=lambda item: item["score"], reverse=True)
+        return reranked_hits[:top_k]
 
     @staticmethod
-    def _tokenize(query: str) -> set[str]:
-        return {token for token in re.findall(r"[a-z0-9_]+", query.lower()) if len(token) > 2}
+    @lru_cache(maxsize=512)
+    def _tokenize(query: str) -> frozenset[str]:
+        return frozenset(
+            token for token in re.findall(r"[a-z0-9_]+", query.lower()) if len(token) > 2
+        )
 
     @staticmethod
-    def _matches_filters(record: VectorRecord, filters: dict[str, str]) -> bool:
-        for key, expected in filters.items():
-            actual = record.metadata.get(key)
-            if actual is None and hasattr(record, key):
-                actual = getattr(record, key)
-            if str(actual) != str(expected):
-                return False
-        return True
-
-    @staticmethod
-    def _lexical_score(query_tokens: set[str], raw_query: str, record: VectorRecord) -> float:
+    def _lexical_score(query_tokens: frozenset[str], raw_query_lower: str, item: dict[str, Any]) -> float:
+        metadata = item.get("metadata", {})
         haystack = " ".join(
             [
-                record.document_name,
-                record.section,
-                record.metadata.get("relative_path", ""),
-                record.content[:800],
+                str(item.get("document_name", "")),
+                str(item.get("section", "")),
+                str(metadata.get("relative_path", "")),
+                str(item.get("content", ""))[:800],
             ]
         ).lower()
         overlap = sum(1 for token in query_tokens if token in haystack)
         score = float(overlap)
-        if any(marker in raw_query.lower() for marker in ("osha", "iso", "oisd", "factory act", "regulation")):
+        if any(marker in raw_query_lower for marker in ("osha", "iso", "oisd", "factory act", "regulation")):
             if any(marker in haystack for marker in ("osha", "iso", "oisd", "factory act", "regulation")):
                 score += 6.0
-            if record.metadata.get("extension") in {".txt", ".md", ".pdf", ".docx"}:
+            if metadata.get("extension") in {".txt", ".md", ".pdf", ".docx"}:
                 score += 1.5
-            if record.metadata.get("extension") in {".csv", ".xlsx"}:
+            if metadata.get("extension") in {".csv", ".xlsx"}:
                 score -= 0.5
-        if "incident" in raw_query.lower() and "incident" in haystack:
+        if "incident" in raw_query_lower and "incident" in haystack:
             score += 2.0
-        if "permit" in raw_query.lower() and "permit" in haystack:
+        if "permit" in raw_query_lower and "permit" in haystack:
             score += 1.5
-        if "procedure" in raw_query.lower() and "procedure" in haystack:
+        if "procedure" in raw_query_lower and "procedure" in haystack:
             score += 2.0
         return score
 
