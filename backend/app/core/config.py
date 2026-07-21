@@ -39,7 +39,8 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3001",
         "http://localhost:5173",
         "http://127.0.0.1:5173", 
-        "https://sentinel-ai-jrxg.vercel.app"]
+        "https://sentinel-ai-jrxg.vercel.app"
+        "https://sentinel-ai-jrxg-shubhankar0126s-projects.vercel.app"]
     )
 
     database_url: str | None = None
