@@ -33,14 +33,62 @@ class CopilotService:
         gemini_client: GeminiClient | None = None,
     ):
         self.session = session
-        self.chat_repository = ChatHistoryRepository(session)
-        self.incident_repository = IncidentRepository(session)
-        self.risk_repository = RiskEventRepository(session)
-        self.recommendation_repository = RecommendationRepository(session)
-        self.plant_repository = PlantRepository(session)
-        self.gemini_client = gemini_client or GeminiClient()
-        self.graph_builder = KnowledgeGraphBuilder()
-        self.retriever = retriever or get_context_retriever()
+        self._chat_repository = None
+        self._incident_repository = None
+        self._risk_repository = None
+        self._recommendation_repository = None
+        self._plant_repository = None
+        self._gemini_client = gemini_client
+        self._graph_builder = None
+        self._retriever = retriever
+
+    @property
+    def chat_repository(self) -> ChatHistoryRepository:
+        if self._chat_repository is None:
+            self._chat_repository = ChatHistoryRepository(self.session)
+        return self._chat_repository
+
+    @property
+    def incident_repository(self) -> IncidentRepository:
+        if self._incident_repository is None:
+            self._incident_repository = IncidentRepository(self.session)
+        return self._incident_repository
+
+    @property
+    def risk_repository(self) -> RiskEventRepository:
+        if self._risk_repository is None:
+            self._risk_repository = RiskEventRepository(self.session)
+        return self._risk_repository
+
+    @property
+    def recommendation_repository(self) -> RecommendationRepository:
+        if self._recommendation_repository is None:
+            self._recommendation_repository = RecommendationRepository(self.session)
+        return self._recommendation_repository
+
+    @property
+    def plant_repository(self) -> PlantRepository:
+        if self._plant_repository is None:
+            self._plant_repository = PlantRepository(self.session)
+        return self._plant_repository
+
+    @property
+    def gemini_client(self) -> GeminiClient:
+        if self._gemini_client is None:
+            self._gemini_client = GeminiClient()
+        return self._gemini_client
+
+    @property
+    def graph_builder(self) -> KnowledgeGraphBuilder:
+        if self._graph_builder is None:
+            self._graph_builder = KnowledgeGraphBuilder()
+        return self._graph_builder
+
+    @property
+    def retriever(self) -> ContextRetriever:
+        if self._retriever is None:
+            self._retriever = get_context_retriever()
+        return self._retriever
 
     async def chat(self, payload: CopilotChatRequest) -> CopilotChatResponse:
         history = list(await self.chat_repository.for_user(payload.user_id, limit=5)) if payload.user_id else []
