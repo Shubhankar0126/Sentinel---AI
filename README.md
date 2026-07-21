@@ -1,18 +1,28 @@
 # Sentinel AI
 
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
-![FAISS](https://img.shields.io/badge/FAISS-005571?logo=meta&logoColor=white)
-![Gemini](https://img.shields.io/badge/Google%20Gemini-4285F4?logo=google&logoColor=white)
-![API Count](https://img.shields.io/badge/API-82%20endpoints-2563eb)
-![License](https://img.shields.io/badge/License-Not%20Specified-lightgrey)
+<div align="center">
+  <h3>Industrial safety intelligence platform for monitoring, compound risk analysis, explainable reasoning, and grounded AI copiloting.</h3>
+  <p>
+    <a href="#project-overview">Overview</a> |
+    <a href="#features">Features</a> |
+    <a href="#architecture">Architecture</a> |
+    <a href="#api-documentation">API Docs</a> |
+    <a href="#project-preview">Preview</a> |
+    <a href="#contact">Contact</a>
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white" alt="FastAPI" />
+    <img src="https://img.shields.io/badge/Next.js-15-000000?logo=next.js&logoColor=white" alt="Next.js 15" />
+    <img src="https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white" alt="React 19" />
+    <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL" />
+    <img src="https://img.shields.io/badge/FAISS-RAG-005571" alt="FAISS RAG" />
+    <img src="https://img.shields.io/badge/Google-Gemini-4285F4?logo=google&logoColor=white" alt="Google Gemini" />
+    <img src="https://img.shields.io/badge/API-82%20endpoints-2563eb" alt="82 API endpoints" />
+    <img src="https://img.shields.io/badge/License-MIT-22c55e" alt="MIT License" />
+  </p>
+</div>
 
-**AI-powered industrial safety command center for plant monitoring, compound risk analysis, knowledge-graph reasoning, and grounded operational copiloting.**
-
-![Sentinel AI Logo](frontend/public/logo.png)
-
-> This README was written from the repository source code and committed project structure. Where the repository does not provide enough evidence, the README states that explicitly instead of guessing.
+> This README is derived from the repository source code and committed project structure. When the repository does not provide enough evidence, the document says so explicitly instead of guessing.
 
 ---
 
@@ -21,6 +31,7 @@
 - [Project Overview](#project-overview)
 - [Problem Statement](#problem-statement)
 - [Solution](#solution)
+- [Highlights](#highlights)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
@@ -35,7 +46,9 @@
 - [Deployment](#deployment)
 - [Performance Optimizations](#performance-optimizations)
 - [Security Features](#security-features)
-- [Screenshots](#screenshots)
+- [Project Preview](#project-preview)
+- [Demo Assets](#demo-assets)
+- [Roadmap](#roadmap)
 - [Future Improvements](#future-improvements)
 - [Known Limitations](#known-limitations)
 - [Contributing](#contributing)
@@ -91,6 +104,21 @@ Sentinel AI solves this by combining:
 - A **retrieval-augmented copilot** that grounds AI responses in indexed documents, dataset-derived content, live risk context, and applicable regulations
 
 The result is a system that does more than visualize data: it helps teams interpret risk, understand why it matters, and act with traceable evidence.
+
+---
+
+## Highlights
+
+| Area | Verified from source |
+|---|---|
+| Full-stack product | Next.js 15 frontend paired with a standalone FastAPI backend |
+| API surface | 82 endpoints across 19 route groups under `/api/v1` |
+| Domain depth | 18 core entities covering plants, equipment, sensors, workers, permits, incidents, compliance, and chat history |
+| AI pipeline | risk scoring, explainability, historical similarity, FAISS retrieval, and Gemini generation |
+| Knowledge graph | NetworkX-based operational graph with topology, incident, permit, maintenance, and recommendation relationships |
+| Operator workflows | dashboards, plant map, risk center, incident center, maintenance, permits, compliance, analytics, and AI copilot |
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
 ---
 
@@ -1028,50 +1056,92 @@ Security-related behavior present in source includes:
 
 ---
 
+## Project Preview
+
+The committed repository currently includes one visual asset and no versioned UI screenshots. This section keeps the README presentation-ready without pretending assets exist when they do not.
+
+| View / Asset | Repository status | Suggested documentation asset |
+|---|---|---|
+| Dashboard overview | Not committed | `docs/screenshots/dashboard-overview.png` |
+| Risk center | Not committed | `docs/screenshots/risk-center.png` |
+| AI copilot | Not committed | `docs/screenshots/ai-copilot.png` |
+| Plant map | Not committed | `docs/screenshots/plant-map.png` |
+| Compliance workspace | Not committed | `docs/screenshots/compliance-report.png` |
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
+
+---
+
+## Demo Assets
+
+No live demo link, demo GIF, presentation deck, or architecture PDF is committed in the repository snapshot analyzed for this README.
+
+Recommended additions for a stronger portfolio or hackathon presentation:
+
+| Asset | Verified current state | Suggested addition |
+|---|---|---|
+| Live demo URL | Not found in committed repo | Add deployed frontend URL once publicly hosted |
+| Demo GIF | Not found in committed repo | `docs/demo/sentinel-demo.gif` |
+| Product walkthrough video | Not found in committed repo | Add YouTube or Loom link |
+| Pitch deck | Not found in committed repo | `docs/presentation/Sentinel-AI-presentation.pdf` |
+| Architecture one-pager | Not found in committed repo | `docs/architecture/system-architecture.pdf` |
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
+
+---
+
 ## Screenshots
 
 ### Available Asset
 
-![Sentinel AI Logo](frontend/public/logo.png)
+- The committed repository tree includes a logo asset at `frontend/public/logo.png`.
 
 ### Missing UI Screenshots
 
-No committed UI screenshots were found in the repository during analysis.
+No committed UI screenshots were found in the repository during analysis. The preview table above lists the highest-value images to add first.
 
-Recommended additions:
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
-- `docs/screenshots/dashboard-overview.png`
-- `docs/screenshots/risk-center.png`
-- `docs/screenshots/ai-copilot.png`
-- `docs/screenshots/plant-map.png`
-- `docs/screenshots/compliance-report.png`
+---
+
+## Roadmap
+
+Based on the current repository state, the highest-impact next steps are:
+
+| Track | Recommended next move | Why it matters |
+|---|---|---|
+| Documentation polish | Add real product screenshots, a demo GIF, and public presentation links | Makes the repository stronger for recruiters, judges, and collaborators |
+| Reproducible delivery | Commit Docker and deployment manifests | Improves onboarding and reduces setup friction |
+| Contributor experience | Track a maintained `.env.example` and add CI checks | Makes the project easier to run and safer to change |
+| Observability | Add metrics around API latency, retrieval latency, and Gemini failures | Helps production hardening and troubleshooting |
+| AI scalability | Move expensive indexing or ingestion paths into background jobs if latency grows | Keeps user-facing workflows responsive at larger scale |
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
 ---
 
 ## Future Improvements
 
 - Add Docker and Compose files for reproducible local and cloud deployment
-- Commit a proper `LICENSE` file
 - Commit a tracked `.env.example` file if you want onboarding to be easier for contributors
 - Add GitHub Actions for linting, tests, and build validation
-- Add frontend screenshots and demo GIFs
-- Add observability around:
-  - API latency
-  - retrieval latency
-  - Gemini failures
-  - risk-analysis throughput
-- Move heavy indexing and ingestion tasks into background jobs if request latency becomes a problem
+- Add frontend screenshots, demo GIFs, and public demo collateral
+- Expand observability for API latency, retrieval latency, Gemini failures, and risk-analysis throughput
+- Move heavy indexing and ingestion tasks into background workers if request latency becomes a problem
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
 ---
 
 ## Known Limitations
 
 - No committed Docker or deployment manifests were found
-- No committed license file was found
-- No committed frontend UI screenshots were found
+- No committed frontend UI screenshots or demo assets were found
 - The repository does not explicitly pin a Python runtime version
-- `.env.example` was present in the analyzed working tree, but not in the committed `HEAD` tree
-- Cloud deployment architecture cannot be reproduced exactly from the repository alone
+- `.env.example` was present in the analyzed working tree earlier, but is not tracked in the committed `HEAD` tree
+- Exact cloud deployment architecture cannot be reproduced with certainty from the repository alone
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
 ---
 
@@ -1082,20 +1152,24 @@ Contributions are welcome.
 Suggested flow:
 
 1. Fork the repository
-2. Create a feature branch
-3. Keep changes focused and well-documented
+2. Create a focused feature branch
+3. Keep changes well-scoped and documented
 4. Add or update tests when behavior changes
-5. Open a pull request with a clear summary
+5. Open a pull request with a clear summary, validation steps, and screenshots where relevant
 
-If you plan a large change, opening an issue first is a good way to align on direction.
+If you plan a larger change, opening an issue first is a good way to align on direction.
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
 ---
 
 ## License
 
-No license file was detected in the committed repository.
+This repository now includes an explicit [MIT License](LICENSE).
 
-If you want this project to be safely reusable for recruiters, collaborators, hackathons, or open source contributions, add an explicit license such as MIT, Apache-2.0, or GPL depending on your goals.
+MIT is a strong default here because it is simple, permissive, and well-suited for portfolio projects, hackathon submissions, recruiter review, and collaborative reuse. If you want stronger copyleft or patent language later, you can replace it intentionally.
+
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
 ---
 
@@ -1112,11 +1186,15 @@ If you want this project to be safely reusable for recruiters, collaborators, ha
 - AI4I dataset assets under `datasets/ai4i`
 - OSHA dataset asset under `datasets/osha`
 
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
+
 ---
 
 ## Contact
 
-- LinkedIn: https://www.linkedin.com/in/shubhankar-pandey-ai/
-- Email: shubhankarpandey322@gmail.com
+- GitHub: [@Shubhankar0126](https://github.com/Shubhankar0126)
+- LinkedIn: `[Add LinkedIn URL]`
+- Email: `[Add contact email]`
 - Portfolio: `[Add portfolio URL]`
 
+<p align="right"><a href="#sentinel-ai">Back to top</a></p>
