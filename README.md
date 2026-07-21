@@ -1122,12 +1122,16 @@ Based on the current repository state, the highest-impact next steps are:
 
 ## Future Improvements
 
-- Add Docker and Compose files for reproducible local and cloud deployment
-- Commit a tracked `.env.example` file if you want onboarding to be easier for contributors
-- Add GitHub Actions for linting, tests, and build validation
-- Add frontend screenshots, demo GIFs, and public demo collateral
-- Expand observability for API latency, retrieval latency, Gemini failures, and risk-analysis throughput
-- Move heavy indexing and ingestion tasks into background workers if request latency becomes a problem
+- Edge AI deployment for on-premise industrial environments
+- Real-time IoT sensor integration using MQTT/Kafka
+- Predictive maintenance using time-series forecasting
+- Computer Vision integration for PPE compliance and hazard detection
+- Digital Twin visualization for industrial plants
+- Multi-plant monitoring and centralized command center
+- Mobile application for field engineers and safety officers
+- Voice-enabled AI Copilot for hands-free industrial operations
+- Advanced analytics dashboards with customizable KPIs
+- Kubernetes-based deployment for large-scale production environments
 
 <p align="right"><a href="#sentinel-ai">Back to top</a></p>
 
