@@ -1137,17 +1137,6 @@ Based on the current repository state, the highest-impact next steps are:
 
 ---
 
-## Known Limitations
-
-- No committed Docker or deployment manifests were found
-- No committed frontend UI screenshots or demo assets were found
-- The repository does not explicitly pin a Python runtime version
-- `.env.example` was present in the analyzed working tree earlier, but is not tracked in the committed `HEAD` tree
-- Exact cloud deployment architecture cannot be reproduced with certainty from the repository alone
-
-<p align="right"><a href="#sentinel-ai">Back to top</a></p>
-
----
 
 ## Contributing
 
