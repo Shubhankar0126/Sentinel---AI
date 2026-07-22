@@ -63,6 +63,7 @@ The result is a system that helps teams monitor plant conditions, understand eme
 
 - **API Docs:** [https://api.sentinelai.sbs/docs](https://api.sentinelai.sbs/docs)
 
+-**Demo Video:** [https://drive.google.com/file/d/1iuE3ZILnPtUsbZaQfye0NsJelS5AgXpA/view?usp=sharing]
 ## Demo Credentials
 
 Admin Login
