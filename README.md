@@ -55,7 +55,7 @@ The result is a system that helps teams monitor plant conditions, understand eme
 
 ## Live Demo
 
-Frontend: `https://sentinel-ai-jrxg.vercel.app/login`
+Frontend: <`https://sentinel-ai-jrxg.vercel.app/login`>
 
 Backend API: `https://api.sentinelai.sbs`
 
