@@ -55,11 +55,13 @@ The result is a system that helps teams monitor plant conditions, understand eme
 
 ## Live Demo
 
-Frontend: <`https://sentinel-ai-jrxg.vercel.app/login`>
+## Live Demo
 
-Backend API: `https://api.sentinelai.sbs`
+- **Frontend:** [https://sentinel-ai-jrxg.vercel.app](https://sentinel-ai-jrxg.vercel.app/login)
 
-API Docs: `https://api.sentinelai.sbs/docs`
+- **Backend API:** [https://api.sentinelai.sbs](https://api.sentinelai.sbs)
+
+- **API Docs:** [https://api.sentinelai.sbs/docs](https://api.sentinelai.sbs/docs)
 
 ## Demo Credentials
 
