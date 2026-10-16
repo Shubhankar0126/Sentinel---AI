@@ -43,6 +43,7 @@ class Settings(BaseSettings):
             "http://127.0.0.1:5173",
             "https://sentinel-ai-jrxg.vercel.app",
             "https://sentinel-ai-jrxg-shubhankar0126s-projects.vercel.app",
+            "https://sentinel-ai-jrxg-git-main-shubhankar0126s-projects.vercel.app",
         ]
     )
 
