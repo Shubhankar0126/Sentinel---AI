@@ -1,3 +1,4 @@
+
 from collections.abc import AsyncIterator
 
 from sqlalchemy import text
@@ -14,21 +15,33 @@ settings = get_settings()
 
 url = make_url(settings.effective_database_url)
 
-# Remove parameters that asyncpg doesn't accept directly
-url = url.difference_update_query(["sslmode", "channel_binding"])
+if url.drivername in (
+    "postgres",
+    "postgresql",
+    "postgresql+psycopg",
+    "postgresql+psycopg2",
+):
+    url = url.set(drivername="postgresql+asyncpg")
+
+url = url.difference_update_query(
+    ["sslmode", "channel_binding"]
+)
+
+connect_args = (
+    {"ssl": True}
+    if not settings.is_sqlite
+    else {}
+)
 
 engine = create_async_engine(
     url,
     echo=settings.sqlalchemy_echo,
-    future=True,
     pool_pre_ping=not settings.is_sqlite,
-    connect_args={
-        "ssl": True,
-    },
+    connect_args=connect_args,
 )
 
 SessionLocal = async_sessionmaker(
-    engine,
+    bind=engine,
     expire_on_commit=False,
     class_=AsyncSession,
 )
