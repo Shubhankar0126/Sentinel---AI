@@ -32,15 +32,18 @@ class Settings(BaseSettings):
     debug: bool = True
     api_prefix: str = "/api/v1"
     log_level: str = "INFO"
+   
     cors_origins: list[str] = Field(
-        default_factory=lambda: ["http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173", 
-        "https://sentinel-ai-jrxg.vercel.app",
-        "https://sentinel-ai-jrxg-shubhankar0126s-projects.vercel.app"]
+        default_factory=lambda: [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:3001",
+            "http://127.0.0.1:3001",
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "https://sentinel-ai-jrxg.vercel.app",
+            "https://sentinel-ai-jrxg-shubhankar0126s-projects.vercel.app",
+        ]
     )
 
     database_url: str | None = None
